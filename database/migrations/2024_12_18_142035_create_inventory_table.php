@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('livelihood_programs', function (Blueprint $table) {
+        Schema::create('inventories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->foreignId('created_by')->constrained('users');
-            $table->foreignId('updated_by')->constrained('users');
+            $table->string('stock_name');
+            $table->string('stock_code');
+            $table->string('category');
+            $table->integer('quantity');
+            $table->string('unit');
+            $table->string('supplier');
+            $table->date('delivery_date');
+            $table->date('expiration_date');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -27,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('livelihood_programs');
+        Schema::dropIfExists('inventories');
     }
 };

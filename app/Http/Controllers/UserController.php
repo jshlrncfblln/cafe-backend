@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Hash;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 
@@ -11,10 +11,6 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $role = $request->query('role');
-        if ($role === 'admin' || $role === 'encoder') {
-            return User::where('role', $role)->get();
-        } 
         return User::all();
     }
 
@@ -26,13 +22,11 @@ class UserController extends Controller
     public function create(Request $request)
     {
         $validatedData = $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'username' => 'required|string|unique:users',
+            'name' => 'required|string',
+            'mobile' => 'required|string',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:8',
             'role' => 'required|string',
-            'status' => 'required|string',
         ]);
 
         $validatedData['password'] = Hash::make($validatedData['password']);
@@ -47,16 +41,14 @@ class UserController extends Controller
         $user = User::find($id);
 
         if (!$user) {
-            abort(404, 'User not found');
+            return response()->json(['message' => 'User not found'], 404);
         }
 
         $validatedData = $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'username' => 'required|string|unique:users,username,' . $id,
+            'name' => 'required|string',
+            'mobile' => 'required|string',
             'email' => 'required|string|email|unique:users,email,' . $id,
             'role' => 'required|string',
-            'status' => 'required|string',
         ]);
 
         $user->update($validatedData);

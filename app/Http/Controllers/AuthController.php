@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Hash;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -11,14 +11,14 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'username' => 'required|exists:users',
+            'email' => 'required',
             'password' => 'required'
         ]);
 
-        $user = User::where('username', $request->username)->first();
+        $user = User::where('email', $request->email)->first();
 
         if (!Hash::check($request->password, $user->password)) {
-            abort(401, "Wrong username or password!");
+            abort(401, "Wrong email or password!");
         }
 
         $token = $user->createToken('API Token')->plainTextToken;
@@ -43,5 +43,5 @@ class AuthController extends Controller
         return request()->user();
     }
 
-    
+
 }

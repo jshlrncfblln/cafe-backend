@@ -11,7 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::rename('survey_livelihood', 'survey_livelihoods');
+        Schema::table('inventories', function (Blueprint $table) {
+            //
+            $table->integer('amount_per_qty')->after('unit');
+        });
     }
 
     /**
@@ -19,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('survey_livelihoods');
+        Schema::table('inventories', function (Blueprint $table) {
+            //
+            $table->dropColumn('amount_per_qty');
+        });
     }
 };

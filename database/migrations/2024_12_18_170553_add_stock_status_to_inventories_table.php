@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('survey_livelihood', function (Blueprint $table) {
-            $table->foreignId('survey_id')->constrained('survey');
-            $table->foreignId('livelihood_id')->constrained('livelihood_programs');
+        Schema::table('inventories', function (Blueprint $table) {
+            //
+            $table->string('stock_status')->default('Available');
         });
     }
 
@@ -22,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('survey_livelihood');
+        Schema::table('inventories', function (Blueprint $table) {
+            //
+            $table->dropColumn('stock_status');
+        });
     }
 };
